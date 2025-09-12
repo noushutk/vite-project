@@ -1,0 +1,1 @@
+// Placeholder for InventoryTable.jsx
