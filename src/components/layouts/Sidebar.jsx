@@ -7,18 +7,19 @@ const menuItems = [
   {
     label: "Transaction",
     children: [
-      { label: "New Sales", path: "/sales" },
-      { label: "New Purchase", path: "/npurchase" },
+      { label: "New Purchase", type: "modal", txType: "purchase" },
+      { label: "New Sales", type: "modal", txType: "sales" },
+      { label: "Transaction Entry", path: "/transaction" },
     ],
   },
   {
     label: "Funds",
     children: [
-      { label: "Receipt", path: "/receipt" },
-      { label: "Payment", path: "/payment" },
-      { label: "Transfer", path: "/transfer" },
-      { label: "Deposit", path: "/deposit" },
-      { label: "Withdrawal", path: "/withdrawal" },
+      { label: "Payment", path: "/fund/payment" },
+      { label: "Receipt", path: "/fund/receipt" },
+      { label: "Transfer", path: "/fund/transfer" },
+      { label: "Deposit", path: "/fund/deposit" },
+      { label: "Withdrawal", path: "/fund/withdrawal" },
     ],
   },
   {
@@ -38,14 +39,12 @@ const menuItems = [
     ],
   },
   {
-  label: "Edit",
-  children: [
-    { label: "Product", path: "/editProduct" },
-    { label: "Account", path: "/accounts" },
-    // Add other edit routes here in future
-  ],
-},
-
+    label: "Edit",
+    children: [
+      { label: "Product", path: "/editProduct" },
+      { label: "Account", path: "/accounts" },
+    ],
+  },
   {
     label: "List",
     children: [
@@ -55,7 +54,7 @@ const menuItems = [
   },
 ];
 
-export default function Sidebar() {
+export default function Sidebar({ openTransactionModal }) {
   const [openMenus, setOpenMenus] = useState({});
   const location = useLocation();
 
@@ -84,14 +83,23 @@ export default function Sidebar() {
               <ul className="ml-4 mt-1 space-y-1">
                 {menu.children.map((child) => (
                   <li key={child.label}>
-                    <Link
-                      to={child.path}
-                      className={`block px-3 py-1 rounded hover:bg-gray-600 ${
-                        location.pathname === child.path ? "bg-gray-700" : ""
-                      }`}
-                    >
-                      {child.label}
-                    </Link>
+                    {child.type === "modal" ? (
+                      <button
+                        onClick={() => openTransactionModal(child.txType)}
+                        className="bg-blue-500 block w-full text-left px-3 py-1 rounded hover:bg-gray-600"
+                      >
+                        {child.label}
+                      </button>
+                    ) : (
+                      <Link
+                        to={child.path}
+                        className={`block px-3 py-1 rounded hover:bg-gray-600 ${
+                          location.pathname === child.path ? "bg-gray-700" : ""
+                        }`}
+                      >
+                        {child.label}
+                      </Link>
+                    )}
                   </li>
                 ))}
               </ul>

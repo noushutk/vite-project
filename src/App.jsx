@@ -1,4 +1,6 @@
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+// src/App.jsx
+import { useState } from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -8,8 +10,13 @@ import AddAccountForm from './components/accounts/AddAccountForm';
 import EditAccountSection from './components/accounts/EditAccountSection';
 import ProductForm from "./components/products/ProductForm";
 import EditProductSection from "./components/products/EditProductSection";
+import TransactionModal from "./components/transactions/TransactionModal";
+import FundTransactionForm from "./components/transactions/FundTransactionForm";
 
 function App() {
+  // Holds the currently selected transaction type for the modal
+  const [transactionType, setTransactionType] = useState(null);
+
   return (
     <Router>
       <div className="min-h-screen bg-gray-100">
@@ -19,20 +26,38 @@ function App() {
 
         <main className="p-4">
           <Routes>
-            <Route path="/" element={<SidebarLayout />}>
-            <Route path="/addAccount" element={<AddAccountForm />}/>
-            <Route path="/addStock" element={<ProductForm />} />
-            <Route path="/editProduct" element={<EditProductSection />} />
+            <Route
+              path="/"
+              element={<SidebarLayout openTransactionModal={setTransactionType} />}
+            >
+              <Route path="/addAccount" element={<AddAccountForm />} />
+              <Route path="/addStock" element={<ProductForm />} />
+              <Route path="/editProduct" element={<EditProductSection />} />
+              <Route path="/accounts" element={<AccountList />} />
+              <Route path="/accounts/edit/:id" element={<EditAccountSection />} />
 
-
-           {/* <Route path="/" element={<Navigate to="/accounts" />} />
-            <Route path="/accounts" element={<AccountList />} />
-            <Route path="/accounts/new" element={<AddAccountForm />} />
-            <Route path="/accounts/:id/edit" element={<EditAccountSection />} /> */}
+              <Route path="/fund/:type" element={<FundTransactionForm />} />
+              
+              {/*<Route path="/payment" element={<FundTransactionForm type="payment" />} />
+              <Route path="/receipt" element={<FundTransactionForm type="receipt" />} />
+              <Route path="/transfer" element={<FundTransactionForm type="transfer" />} /> 
+              <Route path="/deposit" element={<FundTransactionForm type="deposit" />} />
+              <Route path="/withdrawal" element={<FundTransactionForm type="withdrawal" />} />
+              /* No need for /transaction route */}
             </Route>
-            {/* Add more routes like /transactions or /products later */}
           </Routes>
         </main>
+
+        {/* Transaction Modal: Conditionally rendered */}
+        {transactionType && (
+          <TransactionModal
+            type={transactionType}
+            onClose={() => setTransactionType(null)}
+            onSuccess={() => {
+              // Optional: refresh data if needed
+            }}
+          />
+        )}
 
         <ToastContainer position="top-right" autoClose={3000} />
       </div>

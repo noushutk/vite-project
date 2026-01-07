@@ -1,12 +1,10 @@
-// Placeholder for AccountList.jsx
 import { useEffect, useState } from 'react';
 import { supabase } from '../../lib/supabase';
-import AccountFormModal from './AccountFormModal'; // reuse modal for editing
+import { useNavigate } from 'react-router-dom';
 
 export default function AccountList() {
   const [accounts, setAccounts] = useState([]);
-  const [selectedAccount, setSelectedAccount] = useState(null);
-  const [showModal, setShowModal] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     loadAccounts();
@@ -18,14 +16,8 @@ export default function AccountList() {
   };
 
   const handleEdit = (account) => {
-    setSelectedAccount(account);
-    setShowModal(true);
-  };
-
-  const closeModal = () => {
-    setShowModal(false);
-    setSelectedAccount(null);
-    loadAccounts(); // refresh after edit
+    // Navigate to the EditAccountSection with the selected account's ID
+    navigate(`/accounts/edit/${account.accountid}`);
   };
 
   return (
@@ -60,14 +52,6 @@ export default function AccountList() {
           ))}
         </tbody>
       </table>
-
-      {showModal && (
-        <AccountFormModal
-          isOpen={showModal}
-          onClose={closeModal}
-          accountToEdit={selectedAccount}
-        />
-      )}
     </div>
   );
 }

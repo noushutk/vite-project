@@ -23,7 +23,7 @@ export default function AccountFormModal({ isOpen, onClose, accountToEdit }) {
 
   useEffect(() => {
     const fetchGroups = async () => {
-      const { data, error } = await supabase.from('account_groups').select('*');
+      const { data, error } = await supabase.from('actgroup').select('*');
       if (!error) setGroups(data);
     };
     fetchGroups();
@@ -96,8 +96,8 @@ export default function AccountFormModal({ isOpen, onClose, accountToEdit }) {
               >
                 <option value="">Select Group</option>
                 {groups.map((grp) => (
-                  <option key={grp.id} value={grp.id}>
-                    {grp.name}
+                  <option key={grp.actgroupid} value={grp.actgroupid}>
+                    {grp.actgroupname}
                   </option>
                 ))}
               </select>

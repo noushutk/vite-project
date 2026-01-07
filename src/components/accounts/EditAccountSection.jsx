@@ -11,7 +11,7 @@ const EditAccountSection = () => {
   const [groups, setGroups] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  const isCustomer = account?.group_id === 10;
+  const isCustomer = account?.actgroupid === 10;
 
   useEffect(() => {
     loadData();
@@ -22,7 +22,7 @@ const EditAccountSection = () => {
     const { data: accData, error: accError } = await supabase
       .from('accounts')
       .select('*')
-      .eq('id', id)
+      .eq('accountid', id)
       .single();
 
     if (accError) {
@@ -32,11 +32,11 @@ const EditAccountSection = () => {
 
     setAccount(accData);
 
-    if (accData.group_id === 10) {
+    if (accData.actgroupid === 10) {
       const { data: contactData, error: contactError } = await supabase
         .from('customer')
         .select('*')
-        .eq('account_id', id)
+        .eq('accountid', id)
         .single();
 
       if (contactError && contactError.code !== 'PGRST116') {
@@ -46,7 +46,9 @@ const EditAccountSection = () => {
       }
     }
 
-    const { data: groupData } = await supabase.from('account_groups').select('*');
+    const { data: groupData } = await supabase.from('actgroup').select('*');
+    console.log("Fetched groups:", groupData);
+  
     setGroups(groupData || []);
     setLoading(false);
   };
@@ -66,11 +68,11 @@ const EditAccountSection = () => {
     const { error: accUpdateError } = await supabase
       .from('accounts')
       .update({
-        name: account.name,
-        group_id: account.group_id,
-        op_balance: account.op_balance,
+        accountname: account.accountname,
+        actgroupid: account.actgroupid,
+        opbalance: account.opbalance,
       })
-      .eq('id', id);
+      .eq('accountid', id);
 
     if (accUpdateError) {
       toast.error('Failed to update account');
@@ -83,7 +85,7 @@ const EditAccountSection = () => {
         const { error: contactUpdateError } = await supabase
           .from('customer')
           .update(contact)
-          .eq('id', contact.id);
+          .eq('accountid', contact.id);
 
         if (contactUpdateError) {
           toast.error('Failed to update contact');
@@ -93,7 +95,7 @@ const EditAccountSection = () => {
       } else {
         const { error: contactInsertError } = await supabase.from('customer').insert({
           ...contact,
-          account_id: id,
+          accountid: id,
         });
 
         if (contactInsertError) {
@@ -108,6 +110,9 @@ const EditAccountSection = () => {
     setLoading(false);
     navigate('/accounts');
   };
+    const handleCancel = () => {
+    navigate('/accounts'); // Navigate back to the accounts list
+  };
 
   if (loading) return <div className="p-4">Loading...</div>;
   if (!account) return <div className="p-4">Account not found</div>;
@@ -120,8 +125,8 @@ const EditAccountSection = () => {
           <label className="block text-sm font-medium">Account Name</label>
           <input
             type="text"
-            value={account.name || ''}
-            onChange={(e) => handleChange('name', e.target.value)}
+            value={account.accountname || ''}
+            onChange={(e) => handleChange('accountname', e.target.value)}
             className="mt-1 block w-full border-gray-300 rounded-md shadow-sm"
             required
           />
@@ -130,14 +135,14 @@ const EditAccountSection = () => {
         <div>
           <label className="block text-sm font-medium">Group</label>
           <select
-            value={account.group_id || ''}
-            onChange={(e) => handleChange('group_id', parseInt(e.target.value))}
+            value={account.actgroupid || ''}
+            onChange={(e) => handleChange('actgroupid', parseInt(e.target.value))}
             className="mt-1 block w-full border-gray-300 rounded-md shadow-sm"
           >
             <option value="">-- Select Group --</option>
             {groups.map((g) => (
-              <option key={g.id} value={g.id}>
-                {g.name}
+              <option key={g.actgroupid} value={g.actgroupid}>
+                {g.actgroupname}
               </option>
             ))}
           </select>
@@ -147,8 +152,8 @@ const EditAccountSection = () => {
           <label className="block text-sm font-medium">Opening Balance</label>
           <input
             type="number"
-            value={account.op_balance || 0}
-            onChange={(e) => handleChange('op_balance', parseFloat(e.target.value))}
+            value={account.opbalance || 0}
+            onChange={(e) => handleChange('opbalance', parseFloat(e.target.value))}
             className="mt-1 block w-full border-gray-300 rounded-md shadow-sm"
           />
         </div>
@@ -203,6 +208,13 @@ const EditAccountSection = () => {
             className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
           >
             Update Account
+          </button>
+          <button
+            type="button"
+            onClick={handleCancel}
+            className="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600"
+          >
+            Cancel
           </button>
         </div>
       </form>
