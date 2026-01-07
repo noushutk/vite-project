@@ -88,72 +88,150 @@ export default function ProductForm({ onProductAdded }) {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4 bg-white p-4 rounded shadow">
-      <input
-        name="prodname"
-        placeholder="Product Name"
-        value={form.prodname}
-        onChange={handleChange}
-        className="input input-bordered w-full"
-      />
+    <form
+      onSubmit={handleSubmit}
+      className="space-y-6 bg-gradient-to-br from-blue-50 to-blue-100 p-6 rounded-lg shadow-lg "
+    >
+      <h2 className="text-2xl font-bold text-blue-800 text-center">Add New Product</h2>
 
-      <div className="flex items-center gap-2">
-        <select name="categoryid" value={form.categoryid} onChange={handleChange} className="select select-bordered flex-1">
-          <option value="">Select Category</option>
-          {dropdowns.categories.map((c) => (
-            <option key={c.id} value={c.id}>{c.catname}</option>
-          ))}
-        </select>
-        <button type="button" className="btn" onClick={() => setOpenModal("category")}>+</button>
+      {/* Product Name */}
+      <div>
+        <label className="block text-lg font-semibold text-gray-700 mb-2">Product Name</label>
+        <input
+          name="prodname"
+          placeholder="Enter Product Name"
+          value={form.prodname}
+          onChange={handleChange}
+          className="input input-bordered w-full focus:ring-2 focus:ring-blue-400"
+        />
       </div>
 
-      <div className="flex items-center gap-2">
-        <select name="brandid" value={form.brandid} onChange={handleChange} className="select select-bordered flex-1">
-          <option value="">Select Brand</option>
-          {dropdowns.brands.map((b) => (
-            <option key={b.id} value={b.id}>{b.brname}</option>
-          ))}
-        </select>
-        <button type="button" className="btn" onClick={() => setOpenModal("brand")}>+</button>
+      {/* Category */}
+      <div>
+        <label className="block text-lg font-semibold text-gray-700 mb-2">Category</label>
+        <div className="flex items-center gap-2">
+          <select
+            name="categoryid"
+            value={form.categoryid}
+            onChange={handleChange}
+            className="select select-bordered flex-1 focus:ring-2 focus:ring-blue-400"
+          >
+            <option value="">Select Category</option>
+            {dropdowns.categories.map((c) => (
+              <option key={c.id} value={c.id}>
+                {c.catname}
+              </option>
+            ))}
+          </select>
+          <button
+            type="button"
+            className="btn btn-primary"
+            onClick={() => setOpenModal("category")}
+          >
+            Add New
+          </button>
+        </div>
       </div>
 
-      <div className="flex items-center gap-2">
-        <select name="unitid" value={form.unitid} onChange={handleChange} className="select select-bordered flex-1">
-          <option value="">Select Unit</option>
-          {dropdowns.units.map((u) => (
-            <option key={u.id} value={u.id}>{u.unitname}</option>
-          ))}
-        </select>
-        <button type="button" className="btn" onClick={() => setOpenModal("unit")}>+</button>
+      {/* Brand */}
+      <div>
+        <label className="block text-lg font-semibold text-gray-700 mb-2">Brand</label>
+        <div className="flex items-center gap-2">
+          <select
+            name="brandid"
+            value={form.brandid}
+            onChange={handleChange}
+            className="select select-bordered flex-1 focus:ring-2 focus:ring-blue-400"
+          >
+            <option value="">Select Brand</option>
+            {dropdowns.brands.map((b) => (
+              <option key={b.id} value={b.id}>
+                {b.brname}
+              </option>
+            ))}
+          </select>
+          <button
+            type="button"
+            className="btn btn-primary"
+            onClick={() => setOpenModal("brand")}
+          >
+            Add New
+          </button>
+        </div>
       </div>
 
-      <input
-        type="number"
-        name="opbalance"
-        placeholder="Opening Qty"
-        value={form.opbalance}
-        onChange={handleChange}
-        className="input input-bordered w-full"
-      />
-      <input
-        type="number"
-        name="opprice"
-        placeholder="Opening Price"
-        value={form.opprice}
-        onChange={handleChange}
-        className="input input-bordered w-full"
-      />
-      <input
-        type="number"
-        name="sellprice"
-        placeholder="Selling Price"
-        value={form.sellprice}
-        onChange={handleChange}
-        className="input input-bordered w-full"
-      />
+      {/* Unit */}
+      <div>
+        <label className="block text-lg font-semibold text-gray-700 mb-2">Unit</label>
+        <div className="flex items-center gap-2">
+          <select
+            name="unitid"
+            value={form.unitid}
+            onChange={handleChange}
+            className="select select-bordered flex-1 focus:ring-2 focus:ring-blue-400"
+          >
+            <option value="">Select Unit</option>
+            {dropdowns.units.map((u) => (
+              <option key={u.id} value={u.id}>
+                {u.unitname}
+              </option>
+            ))}
+          </select>
+          <button
+            type="button"
+            className="btn btn-primary"
+            onClick={() => setOpenModal("unit")}
+          >
+            Add New
+          </button>
+        </div>
+      </div>
 
-      <button type="submit" className="btn btn-primary w-full">Add Product</button>
+      {/* Opening Balance */}
+      <div>
+        <label className="block text-lg font-semibold text-gray-700 mb-2">Opening Quantity</label>
+        <input
+          type="number"
+          name="opbalance"
+          placeholder="Enter Opening Quantity"
+          value={form.opbalance}
+          onChange={handleChange}
+          className="input input-bordered w-full focus:ring-2 focus:ring-blue-400"
+        />
+      </div>
 
+      {/* Opening Price */}
+      <div>
+        <label className="block text-lg font-semibold text-gray-700 mb-2">Opening Price</label>
+        <input
+          type="number"
+          name="opprice"
+          placeholder="Enter Opening Price"
+          value={form.opprice}
+          onChange={handleChange}
+          className="input input-bordered w-full focus:ring-2 focus:ring-blue-400"
+        />
+      </div>
+
+      {/* Selling Price */}
+      <div>
+        <label className="block text-lg font-semibold text-gray-700 mb-2">Selling Price</label>
+        <input
+          type="number"
+          name="sellprice"
+          placeholder="Enter Selling Price"
+          value={form.sellprice}
+          onChange={handleChange}
+          className="input input-bordered w-full focus:ring-2 focus:ring-blue-400"
+        />
+      </div>
+
+      {/* Submit Button */}
+      <button type="submit" className="btn btn-success w-full text-lg">
+        Add Product
+      </button>
+
+      {/* Modal */}
       {openModal && (
         <AddMasterModal
           type={openModal}

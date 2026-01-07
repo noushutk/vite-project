@@ -9,7 +9,8 @@ const menuItems = [
     children: [
       { label: "New Purchase", type: "modal", txType: "purchase" },
       { label: "New Sales", type: "modal", txType: "sales" },
-      { label: "Transaction Entry", path: "/transaction" },
+      { label: "Ne Sales", path: "nsales" },
+      { label: "Ne Purchase", path: "npurchase" },
     ],
   },
   {
@@ -34,8 +35,7 @@ const menuItems = [
     children: [
       { label: "Account", path: "/addAccount" },
       { label: "Product", path: "/addStock" },
-      { label: "Brand", path: "/addBrand" },
-      { label: "Category", path: "/addCategory" },
+      
     ],
   },
   {
@@ -49,7 +49,9 @@ const menuItems = [
     label: "List",
     children: [
       { label: "Sales Invoices", path: "/showinvoice" },
-      { label: "Product Details", path: "/showproduct" },
+      /*{ label: "Product Details", path: "/showproduct" },*/
+      { label: "PL", path: "/showPL" },
+      { label: "BS", path: "/showBS" },
     ],
   },
 ];

@@ -44,7 +44,7 @@ export default function AccountForm({ onAccountCreated }) {
       ...account,
       accountid: nextId,
     };
-
+    console.log("Creating account:", account); 
     const { data: createdAccount, error } = await supabase
       .from("accounts")
       .insert([newAccount])
