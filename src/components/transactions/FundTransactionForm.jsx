@@ -123,12 +123,29 @@ export default function FundTransactionForm() {
 
   setRefRows(updated);
 }; 
-const handleRefChange = (index, item) => { 
-  const updated = [...refRows]; 
-  updated[index].refid = item.refid; 
-  updated[index].amt = parseFloat(item.balance) ; // ✅ auto-fill amount 
-  updated[index].suggestions = []; 
-  setRefRows(updated); };
+
+const handleRefChange = (index, item) => {
+  if (!item || !item.refid) {
+    console.error("Invalid item passed to handleRefChange", item);
+    return;
+  }
+
+  const updated = [...refRows];
+  updated[index].refid = item.refid;
+  updated[index].amt = parseFloat(item.balance) || 0; // ✅ auto-fill amount
+  updated[index].suggestions = [];
+  setRefRows(updated);
+};
+
+const handleInputChange = (index, field, value) => {
+  const updated = [...refRows];
+  updated[index][field] = value;
+  setRefRows(updated);
+
+  if (field === "refid") {
+    fetchRefSuggestions(to || from, value, value);
+  }
+};
 
   const addRefRow = () => {
     setRefRows([...refRows, { refid: "", amt: "" }]);
@@ -154,7 +171,7 @@ const handleRefChange = (index, item) => {
       toast.error("From and To accounts must be different for transfer.");
       return;
     }
-
+    console.log(refRows);
     const { error } = await supabase.rpc("insertfundtrs", {
       _type: config.tpid,
       _date: date.toISOString(),
@@ -166,8 +183,9 @@ const handleRefChange = (index, item) => {
         amt: parseFloat(r.amt || 0),
       })),
       _total: totalAmt,
+      
     });
-
+    
     if (error) {
       toast.error("Submission failed: " + error.message);
     } else {
@@ -291,10 +309,7 @@ const handleRefChange = (index, item) => {
                     <input
                       type="text"
                       value={row.refid}
-                      onChange={(e) => {
-                        handleRefChange(index, "refid", e.target.value);
-                        fetchRefSuggestions(to || from, row.refid, e.target.value);
-                      }}
+                      onChange={(e) => handleInputChange(index, "refid", e.target.value)}
                       className="input input-bordered w-full"
                       placeholder="Type to search Ref ID..."
                     />
